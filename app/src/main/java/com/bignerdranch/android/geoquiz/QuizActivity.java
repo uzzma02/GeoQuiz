@@ -41,7 +41,7 @@ public class QuizActivity extends AppCompatActivity {
         if(savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
         }
-        
+
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +57,7 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(true);
+                mFalseButton.setEnabled(false);
             }
         });
 
@@ -65,8 +66,10 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(false);
+                mTrueButton.setEnabled(false);
             }
         });
+
 
         //For next buttons, 1.get a reference
         //2. set a View.OnClickListener on it
@@ -77,6 +80,8 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+                mTrueButton.setEnabled(true);
+                mFalseButton.setEnabled(true);
             }
         });
 
@@ -86,6 +91,8 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + mQuestionBank.length - 1) % mQuestionBank.length;
                 updateQuestion();
+                mTrueButton.setEnabled(true);
+                mFalseButton.setEnabled(true);
             }
         });
         updateQuestion();
@@ -136,12 +143,15 @@ public class QuizActivity extends AppCompatActivity {
 
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerisTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-        int messageResId = 0;
+        int messageResId = 0, numOfCorrect = 0, percentScore = 0;
         if (userPressedTrue == answerisTrue) {
             messageResId = R.string.correct_toast;
+            numOfCorrect++;
         } else {
             messageResId = R.string.incorrect_toast;
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
+
+    
 }
