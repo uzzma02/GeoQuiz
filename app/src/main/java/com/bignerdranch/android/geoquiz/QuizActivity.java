@@ -42,7 +42,7 @@ public class QuizActivity extends AppCompatActivity {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
         }
 
-        mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+        mQuestionTextView = (TextView)findViewById(R.id.question_text_view);
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +57,8 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(true);
-                mFalseButton.setEnabled(false);
+                mTrueButton.setEnabled(false);//disable true button once answer is chosen
+                mFalseButton.setEnabled(false);//disable false button once answer is chosen
             }
         });
 
@@ -66,14 +67,15 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(false);
-                mTrueButton.setEnabled(false);
+                mTrueButton.setEnabled(false);//disable true button once answer is chosen
+                mFalseButton.setEnabled(false);//disable false button once answer is chosen
             }
         });
 
 
         //For next buttons, 1.get a reference
         //2. set a View.OnClickListener on it
-        //3. listener wil increment the index and update the TextView's text
+        //3. listener will increment the index and update the TextView's text
         mNextButton = (ImageButton) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +145,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerisTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-        int messageResId = 0, numOfCorrect = 0, percentScore = 0;
+        int messageResId = 0, numOfCorrect = 0, percentScore;
         if (userPressedTrue == answerisTrue) {
             messageResId = R.string.correct_toast;
             numOfCorrect++;
@@ -151,7 +153,12 @@ public class QuizActivity extends AppCompatActivity {
             messageResId = R.string.incorrect_toast;
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
+        /*.....Challenge 3.2.....*/
+        percentScore=(numOfCorrect*100)/mQuestionBank.length;
+        String message = getString(R.string.toast_score, percentScore);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    
-}
+
+
+    }
